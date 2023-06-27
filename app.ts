@@ -1,10 +1,14 @@
 import express from 'express';
 import Item from './models/Item';
 import mongoose from 'mongoose';
-const cors = require('cors');
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const MONGOURL = process.env.MONGO_URL as string;
+const PORT = process.env.PORT;
 
 const app = express();
-const PORT = 5150;
 app.use(cors());
 app.use(express.json());
 
@@ -76,9 +80,7 @@ app.put('/items/:id', (req, res) => {
 
 const connetToDb = async () => {
   mongoose
-    .connect(
-      'mongodb+srv://drfeelgoodpeleg:pokemon@cluster0.icinodo.mongodb.net/your-database-name?retryWrites=true&w=majority'
-    )
+    .connect(MONGOURL)
     .then(() => {
       console.log('connected to db');
       app.listen(PORT, () => console.log(`app running on port ${PORT}`));
@@ -88,17 +90,3 @@ const connetToDb = async () => {
     });
 };
 connetToDb();
-
-// mongoose
-//   .connect(process.env.MONGO_URL, {
-//     useNewUrlParser: true,
-//   })
-//   .then(() => {
-//     app.listen(PORT, () => {
-//       console.log(`Server  Port: ${PORT}`);
-//       /* Add data one time */
-//         //  User.insertMany(users);
-//         // Post.insertMany(posts);
-//     });
-//   })
-//   .catch(error => console.log(error));
