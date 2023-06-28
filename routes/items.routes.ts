@@ -2,18 +2,7 @@ import express from 'express';
 import Item from '../models/Item';
 
 const itemsRouter = express.Router();
-//get a specific item
-itemsRouter.get('/:name', (req, res) => {
-  console.log('searching for item');
-  const itemName = req.params.name;
-  Item.findOne({ name: itemName })
-    .then(data => {
-      res.json(data);
-    })
-    .catch(error => {
-      res.status(500).json({ message: error });
-    });
-});
+
 
 // adding item
 itemsRouter.post('/', (req, res) => {
@@ -56,9 +45,10 @@ itemsRouter.get('/', async (req, res) => {
 itemsRouter.put('/:id', async (req, res) => {
   const itemId = req.params.id;
   const updateData = req.body;
-
+   console.log(itemId, req.body)
   Item.findByIdAndUpdate(itemId, updateData, { new: true })
-    .then(updatedItem => {
+   
+  .then(updatedItem => {
       if (updatedItem) {
         res.status(200).json(updatedItem);
       } else {
